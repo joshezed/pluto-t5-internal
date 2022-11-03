@@ -9,5 +9,8 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
+#include "detours/detours.h"
+#include <cstdint>
+#include "addresses.h"
 
 #endif //PCH_H
