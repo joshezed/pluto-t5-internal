@@ -76,11 +76,11 @@ void PlutoT5Thread(HMODULE hModule)
     OutputDebugString(L"Hello, world! :)");
     PlutoT5AttachHooks();
 
-    bool threadRunning = true;
-    while (threadRunning)
+    bool thread_running = true;
+    while (thread_running)
     {
         if (GetAsyncKeyState(VK_F1))
-            threadRunning = false;
+            thread_running = false;
 
         menu::Update();
     }
@@ -93,13 +93,13 @@ void PlutoT5Thread(HMODULE hModule)
 
 BOOL PlutoT5Attach(HMODULE hModule)
 {
-    HANDLE threadHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PlutoT5Thread, hModule, 0, NULL);
+    HANDLE thread_handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PlutoT5Thread, hModule, 0, NULL);
 
-    bool threadCreated = (threadHandle != NULL);
-    if (threadCreated)
+    bool thread_created = (thread_handle != NULL);
+    if (thread_created)
     {
-        BOOL handleClosed = CloseHandle(threadHandle);
-        if (!handleClosed)
+        BOOL handle_closed = CloseHandle(thread_handle);
+        if (!handle_closed)
         {
             DWORD error = GetLastError();
             // TODO catch thread handle closing errors 
@@ -121,13 +121,13 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     LPVOID lpReserved
 )
 {
-    BOOL processAttached = TRUE;
+    BOOL process_attached = TRUE;
 
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
         // TODO return the proper BOOL for DllMain()
-        processAttached = PlutoT5Attach(hModule);
+        process_attached = PlutoT5Attach(hModule);
         break;
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
@@ -136,6 +136,6 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     }
 
     // Make it easy to add && conditions later
-    return (processAttached);
+    return (process_attached);
 }
 
