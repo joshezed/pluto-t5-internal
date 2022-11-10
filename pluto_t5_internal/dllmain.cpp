@@ -3,7 +3,7 @@
 #include "menu.h"
 
 typedef void(__cdecl* Menu_PaintAll_t)(int localClientNum, void* dc);
-Menu_PaintAll_t Menu_PaintAll = (Menu_PaintAll_t)addresses::Menu_PaintAllAddr;
+Menu_PaintAll_t Menu_PaintAll = (Menu_PaintAll_t)addresses::Menu_PaintAll;
 
 void PlutoT5DrawHook(int localClientNum, void* dc)
 {
@@ -73,8 +73,8 @@ void PlutoT5DetachHooks()
 
 void PlutoT5Thread(HMODULE hModule)
 {
-    OutputDebugString(L"Hello, world! :)");
     PlutoT5AttachHooks();
+    menu::Initialize();
 
     bool thread_running = true;
     while (thread_running)
@@ -86,7 +86,7 @@ void PlutoT5Thread(HMODULE hModule)
     }
 
     PlutoT5DetachHooks();
-    OutputDebugString(L"Goodbye, world! :(");
+    menu::Terminate();
     Sleep(500); // Give the thread time to breathe before release 
     FreeLibraryAndExitThread(hModule, 0);
 }

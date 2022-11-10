@@ -1,25 +1,33 @@
 #pragma once
-#define OPTIONS_LEN(o) (sizeof(o) / sizeof(Option))
+enum Submenu
+{
+	Root,
+	Main,
+	// Used to create an array of indices that keep track
+	// of the user's last selected options within a submenu.
+	// Very hacky but I can't think of a better solution.
+	Count
+};
 
 enum OptionType
 {
 	Text,
-	Command,
+	Command
 };
 
-class Option
+struct Option
 {
-public:
-	OptionType type = OptionType::Text;
-	// std::string would be nice but alas, we are in a DLL
-	const char* text = "";
-	const char* command = "";
-	Option() : text("TEXT_OPTION") {}
-	Option(const char* text) : text(text) {}
+	OptionType type;
+	Submenu menu;
+	const char* text;
+
+	Option() : type(Text), menu(Root), text("OPTION_TEXT") {}
+	Option(Submenu menu, const char* text);
 };
 
-class CmdOption : public Option
+struct CmdOption : Option
 {
-public:
-	CmdOption(const char* text, const char* cmd);
+	const char* cmd;
+
+	CmdOption(Submenu menu, const char* text, const char* cmd);
 };
